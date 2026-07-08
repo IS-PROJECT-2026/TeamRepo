@@ -3,415 +3,646 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Me</title>
+  <title>ICS 4 Capstone 2025 — Group Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cormorant+Upright:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Karla:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --parch:    #FAF6F0;
-      --parch2:   #F2EBE0;
-      --parch3:   #D9CEBC;
-      --green:    #3D6B50;
-      --green2:   #6A9E7F;
-      --green3:   #C8DDD0;
-      --terra:    #C4614A;
-      --rose:     #8B4E6E;
-      --rose2:    #C98AB0;
-      --ink:      #2A1F1A;
-      --ink2:     #4A3B30;
-      --ink3:     #7A6858;
-      --gold:     #B8902A;
-    }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      background: #BCA98C;
-      min-height: 100vh;
-      padding: 36px 16px 60px;
-      -webkit-font-smoothing: antialiased;
+      --board:     #1C2B28;
+      --board2:    #243330;
+      --board3:    #2D3E3A;
+      --chalk:     rgba(245,239,224,0.90);
+      --chalk-dim: rgba(245,239,224,0.40);
+      --chalk-faint: rgba(245,239,224,0.18);
+      --card:      #F5EFE0;
+      --card2:     #EDE5CE;
+      --card-ink:  #2A1F14;
+      --card-ink2: #5C4A35;
+      --card-ink3: #9C8068;
+
+      /* Chalk colours — one per member */
+      --k1: #F4C842;   /* yellow chalk  */
+      --k2: #F07B5A;   /* orange chalk  */
+      --k3: #82D9B4;   /* mint chalk    */
+      --k4: #8BBFE8;   /* blue chalk    */
+      --k5: #D98BE0;   /* lavender chalk*/
+      --k6: #F08BA8;   /* pink chalk    */
     }
 
-    .page {
-      max-width: 800px;
-      margin: 0 auto;
-      background: var(--parch);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.14);
-      position: relative;
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Karla', system-ui, sans-serif;
+      background: var(--board);
+      color: var(--chalk);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      /* Chalkboard texture: subtle noise via repeating gradients */
+      background-image:
+        radial-gradient(ellipse at 20% 30%, rgba(255,255,255,0.015) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(255,255,255,0.010) 0%, transparent 50%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 3px,
+          rgba(255,255,255,0.006) 3px,
+          rgba(255,255,255,0.006) 4px
+        );
+    }
+
+    /* ── CHALK SMUDGE LAYER (decorative bg marks) ───────────────────────────── */
+    .smudges {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
       overflow: hidden;
     }
 
-    /* Corner botanical SVGs */
-    .botanical-tl, .botanical-tr, .botanical-bl, .botanical-br {
-      position: absolute; pointer-events: none; z-index: 1; opacity: 0.22;
+    /* ── BOARD FRAME ─────────────────────────────────────────────────────────── */
+    /* Wooden frame effect — border + inner shadow */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      box-shadow:
+        inset 0 0 0 14px #5C3D1E,
+        inset 0 0 0 16px #7A5230,
+        inset 0 0 0 18px #4A3018,
+        inset 18px 18px 60px rgba(0,0,0,0.5),
+        inset -18px -18px 60px rgba(0,0,0,0.35);
+      pointer-events: none;
+      z-index: 200;
     }
-    .botanical-tl { top: -10px; left: -10px; }
-    .botanical-tr { top: -10px; right: -10px; transform: scaleX(-1); }
-    .botanical-bl { bottom: -10px; left: -10px; transform: scaleY(-1); }
-    .botanical-br { bottom: -10px; right: -10px; transform: scale(-1); }
 
-    /* Header band */
-    .header-band {
-      background: var(--green);
-      padding: 12px 52px;
-      display: flex; align-items: center; justify-content: space-between;
+    /* ── CHALK TRAY LINE at bottom ───────────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 18px; left: 18px; right: 18px;
+      height: 3px;
+      background: rgba(245,239,224,0.12);
+      box-shadow: 0 2px 0 rgba(245,239,224,0.06), 0 -1px 0 rgba(0,0,0,0.3);
+      z-index: 201;
     }
-    .hb-text {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px; font-weight: 500;
-      letter-spacing: 2px; text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
-    }
-    .hb-links { display: flex; gap: 24px; }
-    .hb-link {
-      font-family: 'DM Mono', monospace; font-size: 11px;
-      color: rgba(255,255,255,0.6); text-decoration: none; letter-spacing: 1px;
-    }
-    .hb-link:hover { color: #fff; }
 
-    /* Hero */
-    .hero {
-      padding: 52px 60px 40px;
-      display: grid; grid-template-columns: 1fr auto;
-      gap: 36px; align-items: end;
-      border-bottom: 1.5px solid var(--parch3);
+    /* ── MAIN WRAP ───────────────────────────────────────────────────────────── */
+    .board-wrap {
+      position: relative;
+      z-index: 5;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 52px 40px 72px;
+    }
+
+    /* ── HEADER — chalked programme label ────────────────────────────────────── */
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--chalk-faint);
+    }
+
+    .prog-label {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 14px;
+      color: var(--chalk-dim);
+      letter-spacing: 0.5px;
+    }
+
+    .header-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .header-link {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 13px;
+      color: var(--chalk-dim);
+      text-decoration: none;
+      position: relative;
+    }
+
+    /* Chalk underline on hover */
+    .header-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 1.5px;
+      background: var(--chalk-dim);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+    .header-link:hover { color: var(--chalk); }
+    .header-link:hover::after { transform: scaleX(1); }
+
+    /* ── GROUP NAME — centrepiece ─────────────────────────────────────────────── */
+    .centrepiece {
+      text-align: center;
+      padding: 40px 20px 36px;
+      position: relative;
+    }
+
+    /* Decorative chalk circle behind group name */
+    .centrepiece::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(480px, 90%);
+      height: 180px;
+      border: 2px solid var(--chalk-faint);
+      border-radius: 50%;
+    }
+
+    /* Second wobbly circle — slightly offset, hand-drawn feel */
+    .centrepiece::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-49%, -52%);
+      width: min(490px, 92%);
+      height: 188px;
+      border: 1px dashed rgba(245,239,224,0.10);
+      border-radius: 50%;
+    }
+
+    .centre-kicker {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 13px;
+      color: var(--chalk-dim);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
       position: relative; z-index: 2;
     }
-    .hero-classification {
-      font-family: 'DM Mono', monospace; font-size: 11px;
-      letter-spacing: 2px; text-transform: uppercase;
-      color: var(--green); margin-bottom: 8px;
-    }
-    .hero-name {
-      font-family: 'Cormorant Upright', serif;
-      font-size: clamp(44px, 8vw, 72px);
-      font-weight: 300; color: var(--ink);
-      line-height: 1.0; letter-spacing: -1px; margin-bottom: 10px;
-    }
-    .hero-epithet {
-      font-size: 22px; font-weight: 300; font-style: italic;
-      color: var(--rose); margin-bottom: 18px; letter-spacing: 0.3px;
-    }
-    .hero-tags { display: flex; flex-wrap: wrap; gap: 7px; }
-    .hero-tag {
-      font-family: 'DM Mono', monospace; font-size: 10px;
-      padding: 4px 12px; border: 1px solid var(--parch3);
-      color: var(--ink3); letter-spacing: 0.5px; border-radius: 2px;
+
+    .group-name {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(56px, 11vw, 110px);
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.0;
+      letter-spacing: -1px;
+      position: relative; z-index: 2;
+      /* Chalk texture: slight text-shadow layering */
+      text-shadow:
+        0 0 30px rgba(255,255,255,0.15),
+        1px 1px 0 rgba(255,255,255,0.04),
+        -1px -1px 0 rgba(0,0,0,0.2);
+      margin-bottom: 6px;
     }
 
-    /* Photo mount */
-    .specimen-photo { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .photo-mount {
-      width: 130px; height: 155px;
-      background: var(--parch2); border: 1px solid var(--parch3);
-      box-shadow: inset 0 0 0 7px var(--parch), inset 0 0 0 8px var(--parch3);
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden; position: relative; cursor: pointer;
-    }
-    .photo-mount img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .photo-upload-hint {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-    }
-    .photo-upload-hint svg { opacity: 0.2; }
-    .photo-upload-hint span {
-      font-family: 'DM Mono', monospace; font-size: 9px;
-      color: var(--ink3); text-align: center; line-height: 1.6;
-      letter-spacing: 0.5px; text-transform: uppercase;
-    }
-    .photo-label {
-      font-size: 13px; font-style: italic; color: var(--ink3);
-      font-family: 'Cormorant Garamond', serif;
+    .group-hint {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 13px;
+      color: var(--chalk-dim);
+      font-style: italic;
+      position: relative; z-index: 2;
     }
 
-    /* Content area */
-    .content { padding: 0 60px 52px; position: relative; z-index: 2; }
-
-    /* Each specimen entry */
-    .specimen {
-      padding: 32px 0; border-bottom: 1px solid var(--parch3);
-      display: grid; grid-template-columns: 160px 1fr;
-      gap: 28px; align-items: start;
-    }
-    .specimen:last-child { border-bottom: none; }
-
-    .spec-sidebar {
-      padding-top: 4px; display: flex; flex-direction: column; gap: 5px;
-    }
-    .spec-number {
-      font-family: 'DM Mono', monospace; font-size: 10px;
-      color: var(--rose); letter-spacing: 1px;
-    }
-    .spec-genus {
-      font-size: 15px; font-style: italic; color: var(--green); line-height: 1.3;
-    }
-    .spec-family {
-      font-family: 'DM Mono', monospace; font-size: 9px;
-      color: var(--ink3); letter-spacing: 1px; text-transform: uppercase;
-    }
-    .spec-rule { width: 32px; height: 1.5px; background: var(--rose2); margin-top: 8px; }
-
-    .spec-heading {
-      font-size: 26px; font-weight: 600; color: var(--ink);
-      margin-bottom: 6px; line-height: 1.15;
-    }
-    .spec-prompt {
-      font-size: 13.5px; font-style: italic; color: var(--ink3);
-      margin-bottom: 12px; line-height: 1.65;
-    }
-    .spec-answer {
-      font-size: 17px; font-weight: 300; color: var(--ink2); line-height: 1.85;
+    /* ── CHALK DOODLE SVGs (decorative) ──────────────────────────────────────── */
+    .doodle {
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
     }
 
-    /* Materia medica (tech stack) */
-    .materia { display: flex; flex-direction: column; gap: 0; }
-    .materia-row {
-      display: grid; grid-template-columns: 120px 1fr;
-      gap: 12px; padding: 9px 0;
-      border-bottom: 1px dashed var(--parch3); font-size: 16px; align-items: baseline;
+    /* ── META TAGS row ───────────────────────────────────────────────────────── */
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin: 0 0 48px;
+      flex-wrap: wrap;
     }
-    .materia-row:last-child { border-bottom: none; }
-    .mat-label {
-      font-family: 'DM Mono', monospace; font-size: 10px;
-      color: var(--green); letter-spacing: 0.8px; text-transform: uppercase; padding-top: 2px;
+
+    .meta-item {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 14px;
+      color: var(--chalk-dim);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .mat-val { font-style: italic; color: var(--ink2); font-size: 16px; }
-    .mat-val.placeholder { color: var(--ink3); opacity: 0.75; }
 
-    /* Pressed skills */
-    .pressed-skills { display: flex; flex-direction: column; gap: 10px; }
-    .pressed-item { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: start; }
-    .pressed-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--rose); padding-top: 5px; }
-    .pressed-text { font-size: 16px; font-weight: 300; font-style: italic; color: var(--ink2); line-height: 1.7; }
-
-    /* Footer */
-    .footer {
-      background: var(--green); padding: 16px 60px;
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    .meta-dot {
+      display: inline-block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--chalk-dim);
+      flex-shrink: 0;
     }
-    .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
-    .footer-back { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.6); text-decoration: none; letter-spacing: 1px; }
-    .footer-back:hover { color: #fff; }
 
-    @media (max-width: 620px) {
-      body { padding: 0 0 40px; }
-      .hero, .content { padding-left: 24px; padding-right: 24px; }
-      .header-band, .footer { padding-left: 24px; padding-right: 24px; }
-      .hero { grid-template-columns: 1fr; }
-      .specimen { grid-template-columns: 1fr; }
-      .spec-sidebar { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 10px; }
-      .spec-rule { display: none; }
+    /* ── SECTION LABEL ───────────────────────────────────────────────────────── */
+    .section-label-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .section-label {
+      font-family: 'Caveat', cursive;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--chalk);
+      white-space: nowrap;
+    }
+
+    .section-rule {
+      flex: 1;
+      height: 1.5px;
+      /* Dashed chalk line */
+      background: repeating-linear-gradient(
+        90deg,
+        var(--chalk-faint) 0px,
+        var(--chalk-faint) 8px,
+        transparent 8px,
+        transparent 14px
+      );
+    }
+
+    .section-count {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 13px;
+      color: var(--chalk-dim);
+    }
+
+    /* ── CARDS GRID ──────────────────────────────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 28px;
+    }
+
+    /* ── CARD — index card pinned to board ───────────────────────────────────── */
+    .card {
+      background: var(--card);
+      position: relative;
+      padding: 32px 22px 20px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      /* Slightly rotated — hand-pinned feel. Each card has a different rotation */
+      box-shadow:
+        2px 3px 12px rgba(0,0,0,0.35),
+        4px 6px 24px rgba(0,0,0,0.20);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* Alternating card rotations */
+    .card:nth-child(1) { transform: rotate(-1.2deg); }
+    .card:nth-child(2) { transform: rotate(0.8deg); }
+    .card:nth-child(3) { transform: rotate(-0.5deg); }
+    .card:nth-child(4) { transform: rotate(1.5deg); }
+    .card:nth-child(5) { transform: rotate(-1.0deg); }
+    .card:nth-child(6) { transform: rotate(0.6deg); }
+
+    .card:hover {
+      transform: rotate(0deg) translateY(-6px) scale(1.02);
+      box-shadow:
+        4px 8px 24px rgba(0,0,0,0.45),
+        8px 16px 48px rgba(0,0,0,0.25);
+      z-index: 10;
+    }
+
+    /* Thumbtack — pure CSS pin */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--pin-col, #F4C842);
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.5),
+        inset 0 -2px 4px rgba(0,0,0,0.25),
+        inset 0 1px 2px rgba(255,255,255,0.4);
+      z-index: 5;
+    }
+
+    /* Pin shaft shadow */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 10px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 0 0 2px 2px;
+      z-index: 4;
+    }
+
+    /* Coloured top stripe on each card */
+    .card-stripe {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--pin-col, #F4C842);
+    }
+
+    /* Lined paper effect inside card */
+    .card-lines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 27px,
+        rgba(0,0,0,0.06) 27px,
+        rgba(0,0,0,0.06) 28px
+      );
+      background-position: 0 48px;
+    }
+
+    /* Red margin line */
+    .card-margin {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 36px;
+      width: 1px;
+      background: rgba(220,80,80,0.25);
+    }
+
+    /* Card content */
+    .card-content { position: relative; z-index: 2; }
+
+    /* Avatar + initials */
+    .card-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--pin-col, #F4C842);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Caveat', cursive;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--board);
+      margin-bottom: 10px;
+      border: 2px solid var(--card2);
+      overflow: hidden;
+    }
+
+    .card-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-name {
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--card-ink);
+      line-height: 1.1;
+      margin-bottom: 3px;
+    }
+
+    .card-role {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 13px;
+      color: var(--card-ink3);
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+
+    .card-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(0,0,0,0.1);
+      margin-bottom: 12px;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 16px;
+    }
+
+    .card-tag {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 11px;
+      color: var(--card-ink2);
+      background: var(--card2);
+      border: 1px solid rgba(0,0,0,0.10);
+      padding: 2px 9px;
+      border-radius: 2px;
+    }
+
+    .card-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+
+    .card-cta-text {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--pin-col, #F4C842);
+      /* Override yellow on cream */
+      filter: brightness(0.65) saturate(1.4);
+    }
+
+    .card-arrow {
+      font-family: 'Karla', sans-serif;
+      font-size: 16px;
+      color: var(--card-ink3);
+      transition: transform 0.15s;
+    }
+
+    .card:hover .card-arrow { transform: translateX(4px); }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────────────── */
+    .board-footer {
+      margin-top: 60px;
+      padding-top: 16px;
+      border-top: 1.5px solid var(--chalk-faint);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-copy {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 13px;
+      color: var(--chalk-dim);
+    }
+
+    .footer-back {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 13px;
+      color: var(--chalk-dim);
+      text-decoration: none;
+    }
+
+    .footer-back:hover { color: var(--chalk); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .board-wrap { padding: 40px 24px 60px; }
+      .cards-grid { grid-template-columns: 1fr; gap: 36px; }
+      .centrepiece::before, .centrepiece::after { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card { transition: none; transform: none !important; }
+      .card-arrow { transition: none; }
+      .header-link::after { transition: none; }
     }
   </style>
 </head>
 <body>
-<article class="page">
 
-  <!-- Botanical corner SVGs -->
-  <svg class="botanical-tl" width="200" height="200" viewBox="0 0 200 200" fill="none" aria-hidden="true">
-    <path d="M10 190 Q35 110 90 65 Q55 98 22 155" stroke="#3D6B50" stroke-width="1.4" fill="none"/>
-    <path d="M32 178 Q68 88 135 32" stroke="#3D6B50" stroke-width="0.9" fill="none"/>
-    <ellipse cx="90" cy="65" rx="26" ry="16" fill="#6A9E7F" transform="rotate(-30 90 65)"/>
-    <ellipse cx="135" cy="32" rx="21" ry="13" fill="#3D6B50" transform="rotate(-50 135 32)"/>
-    <ellipse cx="55" cy="112" rx="19" ry="12" fill="#8B4E6E" transform="rotate(20 55 112)"/>
-    <circle cx="82" cy="74" r="6" fill="#C4614A"/>
-    <circle cx="128" cy="41" r="5" fill="#C4614A"/>
-    <path d="M60 158 Q78 122 108 93" stroke="#6A9E7F" stroke-width="0.8" fill="none"/>
-    <ellipse cx="108" cy="93" rx="14" ry="9" fill="#C8DDD0" transform="rotate(-40 108 93)"/>
-    <circle cx="48" cy="140" r="4" fill="#B8902A"/>
+<!-- Smudge layer -->
+<div class="smudges" aria-hidden="true">
+  <!-- Chalk smudges — large blurred SVG marks -->
+  <svg width="100%" height="100%" viewBox="0 0 1000 800" preserveAspectRatio="none" opacity="0.4">
+    <!-- Top-left chalk smudge -->
+    <ellipse cx="80" cy="120" rx="140" ry="60" fill="none" stroke="rgba(245,239,224,0.08)" stroke-width="3"/>
+    <!-- Star doodle top-right -->
+    <path d="M870 80 L876 96 L892 96 L879 106 L884 122 L870 112 L856 122 L861 106 L848 96 L864 96 Z"
+          fill="none" stroke="rgba(244,200,66,0.25)" stroke-width="1.5"/>
+    <!-- Arrow doodle left side -->
+    <path d="M30 380 L60 380 M50 370 L60 380 L50 390" stroke="rgba(245,239,224,0.15)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- Underline squiggle centre-bottom -->
+    <path d="M300 680 Q350 676 400 682 Q450 688 500 680 Q550 672 600 680 Q650 688 700 680"
+          stroke="rgba(245,239,224,0.10)" stroke-width="1.5" fill="none"/>
+    <!-- Circle doodle bottom-right -->
+    <circle cx="920" cy="700" r="55" fill="none" stroke="rgba(139,191,232,0.18)" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- Plus marks -->
+    <path d="M920 200 L920 212 M914 206 L926 206" stroke="rgba(245,239,224,0.18)" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M50 600 L50 612 M44 606 L56 606" stroke="rgba(245,239,224,0.15)" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Dotted line top -->
+    <line x1="200" y1="40" x2="700" y2="40" stroke="rgba(245,239,224,0.07)" stroke-width="1" stroke-dasharray="4 6"/>
+    <!-- Small hearts -->
+    <path d="M140 680 C140 675 133 668 128 672 C123 668 116 675 116 680 C116 688 128 698 128 698 C128 698 140 688 140 680Z"
+          fill="rgba(240,139,168,0.20)"/>
+    <!-- Bracket doodle -->
+    <path d="M960 300 L950 300 L950 420 L960 420" stroke="rgba(245,239,224,0.10)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
   </svg>
-  <svg class="botanical-tr" width="200" height="200" viewBox="0 0 200 200" fill="none" aria-hidden="true">
-    <path d="M10 190 Q35 110 90 65 Q55 98 22 155" stroke="#3D6B50" stroke-width="1.4" fill="none"/>
-    <path d="M32 178 Q68 88 135 32" stroke="#3D6B50" stroke-width="0.9" fill="none"/>
-    <ellipse cx="90" cy="65" rx="26" ry="16" fill="#6A9E7F" transform="rotate(-30 90 65)"/>
-    <ellipse cx="135" cy="32" rx="21" ry="13" fill="#3D6B50" transform="rotate(-50 135 32)"/>
-    <ellipse cx="55" cy="112" rx="19" ry="12" fill="#8B4E6E" transform="rotate(20 55 112)"/>
-    <circle cx="82" cy="74" r="6" fill="#C4614A"/>
-    <circle cx="128" cy="41" r="5" fill="#C4614A"/>
-  </svg>
-  <svg class="botanical-bl" width="180" height="180" viewBox="0 0 180 180" fill="none" aria-hidden="true">
-    <path d="M10 10 Q45 68 112 100" stroke="#3D6B50" stroke-width="1.1" fill="none"/>
-    <ellipse cx="68" cy="60" rx="23" ry="14" fill="#6A9E7F" transform="rotate(15 68 60)"/>
-    <ellipse cx="112" cy="100" rx="18" ry="11" fill="#8B4E6E" transform="rotate(-20 112 100)"/>
-    <circle cx="73" cy="52" r="6" fill="#C4614A"/>
-    <path d="M28 34 Q62 73 90 112" stroke="#6A9E7F" stroke-width="0.8" fill="none"/>
-    <ellipse cx="90" cy="112" rx="14" ry="8" fill="#C8DDD0" transform="rotate(10 90 112)"/>
-    <circle cx="40" cy="80" r="4" fill="#B8902A"/>
-  </svg>
+</div>
 
-  <div class="header-band">
-    <span class="hb-text">ICS 4 Capstone · Strathmore University · 2025</span>
-    <div class="hb-links">
-      <a href="[Your LinkedIn URL]" target="_blank" rel="noopener" class="hb-link">LinkedIn ↗</a>
-      <a href="https://github.com/[your-username]" target="_blank" rel="noopener" class="hb-link">GitHub ↗</a>
-    </div>
+<div class="board-wrap">
+
+  <!-- Header -->
+  <header class="board-header">
+    <span class="prog-label">ICS 4 Capstone · Strathmore University · 2025</span>
+    <nav class="header-links">
+      <a href="[Your LinkedIn URL]" target="_blank" rel="noopener" class="header-link">LinkedIn ↗</a>
+      <a href="https://github.com/[your-username]" target="_blank" rel="noopener" class="header-link">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <!-- Centrepiece group name -->
+  <div class="centrepiece">
+
+    <!-- Chalk doodle arrows flanking the name -->
+    <svg class="doodle" style="left:5%;top:35%;width:60px;height:40px" viewBox="0 0 60 40" fill="none" aria-hidden="true">
+      <path d="M5 20 Q20 8 50 20" stroke="rgba(245,239,224,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M42 14 L50 20 L42 26" stroke="rgba(245,239,224,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <svg class="doodle" style="right:5%;top:35%;width:60px;height:40px" viewBox="0 0 60 40" fill="none" aria-hidden="true">
+      <path d="M55 20 Q40 8 10 20" stroke="rgba(245,239,224,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M18 14 L10 20 L18 26" stroke="rgba(245,239,224,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+    <p class="centre-kicker">✦ Group Portfolio ✦</p>
+
+    <!--
+      ╔════════════════════════════════════════════════════╗
+      ║  Replace "Your Group Name" with your group name.  ║
+      ║  Keep it short — 1 to 3 words works best.         ║
+      ╚════════════════════════════════════════════════════╝
+    -->
+    <h1 class="group-name">Your Group Name</h1>
+    <p class="group-hint">← write your group name here</p>
   </div>
 
-  <div class="hero">
-    <div class="hero-text">
-      <p class="hero-classification">Specimen No. ICS–2025 · Nairobi, Kenya</p>
-      <h1 class="hero-name"><br>Joan Gichana</h1>
-      <p class="hero-epithet">Student</p>
-      <div class="hero-tags">
-        <span class="hero-tag">BSc Informatics and Computer Science</span>
-        <span class="hero-tag">Open to work</span>
-        <span class="hero-tag">Class of 2027</span>
-      </div>
-    </div>
-    <div class="specimen-photo">
-      <div class="photo-mount" role="img" aria-label="Profile photo — replace with your own">
-        <!--
-          TO ADD YOUR PHOTO:
-          Delete .photo-upload-hint and replace with:
-          <img src="images/your-photo.jpg" alt="Photo of [Your Name]">
-        -->
-        <div class="photo-upload-hint">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5C4A3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>paste your<br>photo here</span>
-        </div>
-      </div>
-      <p class="photo-label">fig. I — portrait</p>
-    </div>
+  <!-- Meta info row -->
+  <div class="meta-row">
+    <span class="meta-item"><span class="meta-dot"></span> Nairobi, Kenya</span>
+    <span class="meta-item"><span class="meta-dot"></span> BSc Information Technology</span>
+    <span class="meta-item"><span class="meta-dot"></span> Class of 2025</span>
   </div>
 
-  <div class="content">
-
-    <div class="specimen">
-      <div class="spec-sidebar">
-        <span class="spec-number">Sp. 01</span>
-        <span class="spec-genus">Missio technologiae</span>
-        <span class="spec-family">Mission</span>
-        <div class="spec-rule"></div>
-      </div>
-      <div class="spec-body">
-        <h2 class="spec-heading">My Coding Mission</h2>
-        <p class="spec-prompt">What kind of real-world problems do you want to solve using technology? Write 2–3 sentences.</p>
-        <p class="spec-answer">[Write your answer here]</p>
-      </div>
-    </div>
-
-    <div class="specimen">
-      <div class="spec-sidebar">
-        <span class="spec-number">Sp. 02</span>
-        <span class="spec-genus">Artes digitales</span>
-        <span class="spec-family">Tech Stack</span>
-        <div class="spec-rule"></div>
-      </div>
-      <div class="spec-body">
-        <h2 class="spec-heading">My Tech Stack</h2>
-        <p class="spec-prompt">What tools do you know now? What two technologies do you want to learn next?</p>
-        <div class="materia">
-          <div class="materia-row">
-            <span class="mat-label">Proficient in</span>
-            <span class="mat-val placeholder">e.g. Python, HTML &amp; CSS</span>
-          </div>
-          <div class="materia-row">
-            <span class="mat-label">Fluent in</span>
-            <span class="mat-val placeholder">e.g. JavaScript, SQL</span>
-          </div>
-          <div class="materia-row">
-            <span class="mat-label">Cultivating</span>
-            <span class="mat-val placeholder">e.g. React — in progress</span>
-          </div>
-          <div class="materia-row">
-            <span class="mat-label">Germinating</span>
-            <span class="mat-val placeholder">e.g. Docker — next season</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="specimen">
-      <div class="spec-sidebar">
-        <span class="spec-number">Sp. 03</span>
-        <span class="spec-genus">Vita extra codicem</span>
-        <span class="spec-family">Passions</span>
-        <div class="spec-rule"></div>
-      </div>
-      <div class="spec-body">
-        <h2 class="spec-heading">My Passions</h2>
-        <p class="spec-prompt">What do you love doing when you are not looking at a computer screen?</p>
-        <p class="spec-answer">[e.g., playing football, baking, photography, reading]</p>
-      </div>
-    </div>
-
-    <div class="specimen">
-      <div class="spec-sidebar">
-        <span class="spec-number">Sp. 04</span>
-        <span class="spec-genus">Artes acquisitae</span>
-        <span class="spec-family">Skills</span>
-        <div class="spec-rule"></div>
-      </div>
-      <div class="spec-body">
-        <h2 class="spec-heading">Skills Acquired</h2>
-        <p class="spec-prompt">The three most valuable life or professional skills from your degree.</p>
-        <div class="pressed-skills">
-          <div class="pressed-item">
-            <span class="pressed-num">i.</span>
-            <span class="pressed-text">[Skill 1 — e.g., Breaking complex problems into smaller steps]</span>
-          </div>
-          <div class="pressed-item">
-            <span class="pressed-num">ii.</span>
-            <span class="pressed-text">[Skill 2 — e.g., Collaborating under pressure in a team]</span>
-          </div>
-          <div class="pressed-item">
-            <span class="pressed-num">iii.</span>
-            <span class="pressed-text">[Skill 3 — e.g., Communicating technical ideas clearly]</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="specimen">
-      <div class="spec-sidebar">
-        <span class="spec-number">Sp. 05</span>
-        <span class="spec-genus">Energia et studium</span>
-        <span class="spec-family">Energy</span>
-        <div class="spec-rule"></div>
-      </div>
-      <div class="spec-body">
-        <h2 class="spec-heading">Energy &amp; Engagement</h2>
-        <p class="spec-prompt">Which classes or projects brought you the most energy, and why?</p>
-        <p class="spec-answer">[Write your answer here]</p>
-      </div>
-    </div>
-
-    <div class="specimen">
-      <div class="spec-sidebar">
-        <span class="spec-number">Sp. 06</span>
-        <span class="spec-genus">Retrospectio</span>
-        <span class="spec-family">Reflection</span>
-        <div class="spec-rule"></div>
-      </div>
-      <div class="spec-body">
-        <h2 class="spec-heading">Looking Back</h2>
-        <p class="spec-prompt">If you were to give advice to your first-year self, what would it be?</p>
-        <p class="spec-answer">[Write your answer here]</p>
-      </div>
-    </div>
-
-    <div class="specimen">
-      <div class="spec-sidebar">
-        <span class="spec-number">Sp. 07</span>
-        <span class="spec-genus">Circulus influentiae</span>
-        <span class="spec-family">Gratitude</span>
-        <div class="spec-rule"></div>
-      </div>
-      <div class="spec-body">
-        <h2 class="spec-heading">Circle of Influence</h2>
-        <p class="spec-prompt">Who are the mentors, peers, or lecturers who have poured into you?</p>
-        <p class="spec-answer">[Write your answer here]</p>
-      </div>
-    </div>
-
+  <!-- Section label -->
+  <div class="section-label-row">
+    <span class="section-label">Meet the team —</span>
+    <div class="section-rule" aria-hidden="true"></div>
+    <!--
+      Update the number below to match how many members are in your group
+    -->
+    <span class="section-count">6 members</span>
   </div>
 
-  <footer class="footer">
-    <span class="footer-copy">Herbarium ICS · Strathmore University · Nairobi 2025</span>
-    <a href="index.html" class="footer-back">← Back to company page</a>
+  <!-- Cards grid -->
+  <!--
+    ╔═══════════════════════════════════════════════════════════════════╗
+    ║  HOW TO CUSTOMISE EACH CARD:                                     ║
+    ║  1. Change --pin-col to any colour for the thumbtack + stripe    ║
+    ║  2. Change the two-letter initials inside .card-avatar           ║
+    ║  3. Replace [Member Name], [Role], and the tech tags             ║
+    ║  4. Update href to that member's about-me.html file              ║
+    ║  5. To add a real photo: put <img> inside .card-avatar           ║
+    ╚═══════════════════════════════════════════════════════════════════╝
+  -->
+  <div class="cards-grid">
+
+    <!-- Member 1 -->
+    <a class="card" href="member-1/about-me.html" style="--pin-col: var(--k1)">
+      <div class="card-stripe"></div>
+      <div class="card-lines" aria-hidden="true"></div>
+      <div class="card-margin" aria-hidden="true"></div>
+      <div class="card-content">
+        <div class="card-avatar">AB</div>
+        <p class="card-name">[Member Name]</p>
+        <p class="card-role">[Role — e.g. Frontend Developer]</p>
+        <div class="card-divider"></div>
+        <div class="card-tags">
+          <span class="card-tag">Python</span>
+          <span class="card-tag">HTML & CSS</span>
+          <span class="card-tag">JavaScript</span>
+        </div>
+        <div class="card-cta">
+          <span class="card-cta-text">View portfolio</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    
+  </div><!-- /cards-grid -->
+
+  <!-- Footer -->
+  <footer class="board-footer">
+    <span class="footer-copy">ICS 4 Capstone · Strathmore University · Nairobi 2025</span>
+    <a href="#" class="footer-back">↑ Back to top</a>
   </footer>
 
-</article>
+</div><!-- /board-wrap -->
+
 </body>
 </html>
